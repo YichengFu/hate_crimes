@@ -9,7 +9,6 @@ This repository contains the code, data, and analysis for the analysis of hate c
 
 The repo is structured as:
 
--   `sketch` contains the Author's initial thinking process on the data needed for the research topic and the dataset's visualization.
 -   `data/raw_data` contains the raw data as obtained from OpenDataToronto.
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.

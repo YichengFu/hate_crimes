@@ -17,7 +17,7 @@ raw_data <- read_csv("data/raw_data/raw_data.csv")
 library(dplyr)
 library(lubridate) # for date handling
 
-# Load your dataset
+# Load data set
 hate_crimes_data <- read.csv("data/raw_data/raw_data.csv")
 
 # View the structure of the data
