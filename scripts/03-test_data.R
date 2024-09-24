@@ -23,22 +23,18 @@ na_test_results <- colSums(is.na(data)) > 0
 # 2. Test for any duplicates in the data
 duplicate_test_result <- sum(duplicated(data)) > 0
 
-# 3. Test if any negative numbers exist in the numeric columns
-# Replace OCCURRENCE_YEAR with any other numeric column you want to test
-negative_value_test <- any(data$OCCURRENCE_YEAR < 0)
+# 3. Test if any negative numbers or 0 exist in the numeric columns
+negative_value_test <- any(data$OCCURRENCE_YEAR < 0 | data$OCCURRENCE_DATE< 0 |data$OCCURRENCE_TIME <0 | data$REPORTED_DATE<0)
 
-# 4. Test if any zeros or less than zeros exist in a numeric column
-zero_value_test <- any(data$OCCURRENCE_YEAR <= 0)
 
-# 5. Test for logical consistency (occurrence date should be < reported date)
+# 4. Test for logical consistency (occurrence date should be < reported date)
 logical_consistency_test <- all(data$OCCURRENCE_DATE < data$REPORTED_DATE)
 
 # Output results as TRUE or FALSE
 list(
   "Missing Values Test" = na_test_results,
   "Duplicate Test" = duplicate_test_result,
-  "Negative Number Test" = negative_value_test,
-  "Zero or Less Test" = zero_value_test,
+  "Negative or zero Number Test" = negative_value_test,
   "Logical Consistency Test" = logical_consistency_test
 )
 
