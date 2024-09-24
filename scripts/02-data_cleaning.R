@@ -11,34 +11,49 @@
 library(tidyverse)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_data <- read_csv("data/raw_data/raw_data.csv")
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+# Load the necessary packages
+library(dplyr)
+library(lubridate) # for date handling
+
+# Load your dataset
+hate_crimes_data <- read.csv("data/raw_data/raw_data.csv")
+
+# View the structure of the data
+str(hate_crimes_data)
+
+# 1. Remove duplicates
+hate_crimes_cleaned <- hate_crimes_data %>% distinct()
+
+# 2. Handle missing values
+# You can either remove rows with missing values or impute them
+# Removing rows with missing values
+hate_crimes_cleaned <- hate_crimes_cleaned %>% drop_na()
+
+# Impute missing values if appropriate 
+hate_crimes_cleaned$RACE_BIAS[is.na(hate_crimes_cleaned$RACE_BIAS)] <- "None"
+hate_crimes_cleaned$RELIGION_BIAS[is.na(hate_crimes_cleaned$RELIGION_BIAS)] <- "None"
+hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS[is.na(hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS)] <- "None"
+
+# 3. Convert dates to proper date format
+hate_crimes_cleaned$OCCURRENCE_DATE <- as.Date(hate_crimes_cleaned$OCCURRENCE_DATE, format="%Y-%m-%d")
+
+# 4. Ensure consistent formatting (e.g., converting bias columns to lowercase or factor variables)
+hate_crimes_cleaned$RACE_BIAS <- tolower(hate_crimes_cleaned$RACE_BIAS)
+hate_crimes_cleaned$RELIGION_BIAS <- tolower(hate_crimes_cleaned$RELIGION_BIAS)
+hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS <- tolower(hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS)
+
+# 5. Remove unnecessary columns 
+hate_crimes_cleaned <- hate_crimes_cleaned %>%
+  select(-c("X_id", "EVENT_UNIQUE_ID"))
+
+# 6. Check for outliers 
+summary(hate_crimes_cleaned)
+
+# View the cleaned data
+head(hate_crimes_cleaned)
+
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+write_csv(hate_crimes_cleaned, "data/analysis_data/analysis_data.csv")
