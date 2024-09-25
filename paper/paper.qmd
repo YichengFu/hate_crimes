@@ -8,6 +8,7 @@ date: 24 September 2024
 date-format: long
 abstract: "This paper analyzes the temporal and spatial patterns of hate crimes in Toronto focusing on trends over time and neighborhood disparities. Toronto Open Data hate crime is used to explore variations in crime frequency and the prevalence of biases such as race, religion and sexual orientation. The results highlight distinct trends and reveal neighborhoods with higher concentrations of bias-motivated incidents; these findings offer insights for addressing hate crimes in the city."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -31,9 +32,11 @@ analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+Hate crimes are a significant incident reflecting deep-rooted prejudice and discrimination within communities. Hate-crime victimization against racially visible people is of growing concern (Chongatera 2013). These crimes not only impact individuals but also harm the society often leaving individuals feeling unsafe. Social violence omit both the daily violence suffered by certain social categories and its many impacts on the victims (Dalphond 2021). In Toronto, understanding the patterns and dynamics of hate crimes is crucial for addressing their causes and mitigating their effects. While racial and cultural diversity initiatives are central in hate crime policy, combating racially motivated hate crime is often obscured by matters considered more significant by police (Bryan 2019). This paper aims to fill that gap by providing an in-depth analysis of hate crimes in Toronto over time and across different neighborhoods.
 
-The remainder of this paper is structured as follows. @sec-data....
+This study focuses exploring two primary questions: how hate crimes in Toronto have evolved over time and whether certain neighborhoods experience a disproportionate concentration of bias-motivated incidents. Using Toronto open Data hate crime from 2018 to 2023 I analyzes temporal trends to identify peaks and patterns in the frequency of reported incidents. Additionally, the research examines whether specific biases (such as race, religion, or sexual orientation) are more prevalent in particular areas contributing to an understanding of neighborhood-level disparities. The results provide insight into both the temporal and spatial aspects of hate crimes, shedding light on how bias manifests in different contexts within the city.
+
+The data section will introduced the detail of the data set used in this research. The variables as well as the cleaning process will be discussed in this section. The result section will focus on the findings and the visualization of the analysis. The discussion session talks about the limitation of this research and potential error caused by research design or the natural form of data. lastly, the conclusion part raps up the discovers and summarizes all the findings into a short paragraph. 
 
 # Data {#sec-data}
 
@@ -58,36 +61,6 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| message: false
 
 ```
-
-Talk way more about it.
-
-# Model
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.
-
-```{=tex}
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-```
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 # Results
 
@@ -137,19 +110,6 @@ Weaknesses and next steps should also be included.
 
 \newpage
 
-\appendix
-
-# Appendix {.unnumbered}
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows...
 
 ```{r}
 #| eval: true
@@ -163,23 +123,7 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 
 ```
 
-## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-```
 
 \newpage
 
