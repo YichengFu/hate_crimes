@@ -36,22 +36,21 @@ Hate crimes are a significant incident reflecting deep-rooted prejudice and disc
 
 This study focuses exploring two primary questions: how hate crimes in Toronto have evolved over time and whether certain neighborhoods experience a disproportionate concentration of bias-motivated incidents. Using Toronto open Data hate crime from 2018 to 2023 I analyzes temporal trends to identify peaks and patterns in the frequency of reported incidents. Additionally, the research examines whether specific biases (such as race, religion, or sexual orientation) are more prevalent in particular areas contributing to an understanding of neighborhood-level disparities. The results provide insight into both the temporal and spatial aspects of hate crimes, shedding light on how bias manifests in different contexts within the city.
 
-The data section will introduced the detail of the data set used in this research. The variables as well as the cleaning process will be discussed in this section. The result section will focus on the findings and the visualization of the analysis. The discussion session talks about the limitation of this research and potential error caused by research design or the natural form of data. lastly, the conclusion part raps up the discovers and summarizes all the findings into a short paragraph. 
+The data section will introduced the detail of the data set used in this research in @sec-data -- Data. The variables as well as the cleaning process will be discussed in this section. The result section @sec-results will focus on the findings and the visualization of the analysis. The discussion session @sec-discussion talks about the limitation of this research and potential error caused by research design or the natural form of data. lastly, the conclusion part raps up the discovers and summarizes all the findings into a short paragraph.
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+## Measurement and packages {#sec-measurement and packages}
+The Data set used in the analysis is gathered from Open Data Toronto through the Open Data Toronto [@opendatatoronto] and used the statistical software R [@citeR] for importing data, data cleaning and testing data. The data source "Crime Data" is used from [@open-data-set] collected from Toronto Police starting from 2018 to the end of 2023. It includes both temporal and spatial attributes. Other packages were used for analyzing the data such as ggplot [@ggplot2], tidyverse [@tidyverse], lubridate [@lubridate], dplyr [@dplyr],tinytex [@tinytex]. 
 
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
+Data contains around 1400 observations and contains the occurrence date and specific time where the incident happened and the date reported to the police. The reason for the hate crime is categorized as race bias, religion bias and sexual orientation bias etc. The motive for 
+committing a crime, the illegal activity and the neighborhood where the crime occurred are documented by the police throughout the years. Furthermore, the type of location  such as park, apartment and school are documented to form the detailed data set and is named "Hate Crime".
 
-```
+## Data cleaning {#sec-data cleaning}
 
-Talk more about it.
+After observing the data, some observations were dropped due to missing values in location type meaning the recorder had a hard time describing the location characteristics. Therefore, these observations were dropped out of the cleaned data set and will not be included in further data analysis. Date is critical in our data investigation, observations where the reported time is before occurrence time is dropped to assure data validity. Since the data set is from Open Data Toronto the quality of the data is decent. Further cleaning process is unnecessary due to origin high quality of data set . 
 
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+## Observation
 
 ```{r}
 #| label: fig-planes
@@ -62,7 +61,7 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 
 ```
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
@@ -94,11 +93,10 @@ modelsummary::modelsummary(
 )
 ```
 
-# Discussion
+# Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Second discussion point
 
@@ -107,23 +105,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 ## Weaknesses and next steps
 
 Weaknesses and next steps should also be included.
-
-\newpage
-
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-```
-
-
 
 \newpage
 
