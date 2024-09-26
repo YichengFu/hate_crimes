@@ -6,7 +6,7 @@ author:
 thanks: "Code and data are available at: https://github.com/YichengFu/hate_crimes.git"
 date: 24 September 2024
 date-format: long
-abstract: "This paper analyzes the temporal and spatial patterns of hate crimes in Toronto focusing on trends over time and neighborhood disparities. Toronto Open Data hate crime is used to explore variations in crime frequency and the prevalence of biases such as race, religion and sexual orientation. The results highlight distinct trends and reveal neighborhoods with higher concentrations of bias-motivated incidents; these findings offer insights for addressing hate crimes in the city."
+abstract: "This paper analyzes the temporal and spatial patterns of hate crimes in Toronto focusing on trends over time and neighborhood disparities. Toronto Open Data-hate crime is used to explore variations in crime frequency and the prevalence of biases such as race, religion and sexual orientation. The results highlight distinct increasing trends and reveal youge-bay corridor neighborhoods with highest concentrations of bias-motivated incidents; these findings offer insights for addressing hate crimes and police enforcement in the city."
 format: pdf
 toc: true
 number-sections: true
@@ -123,7 +123,7 @@ neighborhood_filtered <- analysis_data %>%
 kable(neighborhood_filtered)
 ```
 
-## Examine the Number of Hate Crimes Across Time. 
+## Number of Hate Crimes Across Time. 
 
 The time series graph regarding number of hate crimes is shown @fig-1. While the data reveals short-term variability with notable spikes and drops over several months the overall trend suggests an upward trend in hate crime incidents from 2018 to 2023. Specifically, there are sharp increases in hate crime counts around late 2020 and mid-2022 followed by periods of relative decline. This phenomenom of huge spikes could be due to world-wise disease COVID-19 but further justification is needed. Despite these fluctuations the general pattern indicates that hate crimes have become more frequent in recent years.
 
@@ -146,7 +146,7 @@ hate_crimes_by_month <- hate_crimes_data %>%
   ungroup()
 # Create a line plot of hate crimes by year and month, with breaks every 3 months
 ggplot(hate_crimes_by_month, aes(x = as.Date(paste(OCCURRENCE_YEAR, OCCURRENCE_MONTH, "01", sep = "-")), y = Crime_Count)) +
-  geom_line(color = "blue", size = 1.2) +
+  geom_line(color = "blue", size = 1) +
   labs(title = "Hate Crimes Over Time (Every 3 Months Breakdown)",
        x = "Date",
        y = "Number of Hate Crimes") +
@@ -155,6 +155,100 @@ ggplot(hate_crimes_by_month, aes(x = as.Date(paste(OCCURRENCE_YEAR, OCCURRENCE_M
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate the labels for better readability
 ```
 
+## Analysis of Hate Crimes by Bias Type   
+
+According to @fig2, it illustrates the count of hate crimes by bias type from 2018 to 2023 broken down into half-year intervals. Hate crimes involving race bias (in red) consistently form the largest proportion of incidents across all half-year periods with a marked increase especially in the later periods (2022 and 2023). Religion bias (in green) remains a significant contributor to hate crimes, steadily increasing over time, particularly during 2022 and 2023. Sexual orientation bias (in blue) while present constitutes a smaller proportion of the total hate crimes though it shows a noticeable rise in recent years.
+
+The general trend indicates an upward trajectory in the total number of hate crimes across all bias types with a sharp increase in the later half-year periods of 2022 and 2023. This suggests that hate crimes have become more frequent and more diverse in bias type over time highlighting the need for continued focus on these issues.
+```{r}
+#| label: fig-2
+#| fig-cap: The Count of Hate Crimes by Bias Types
+#| echo: false
+#| warning: false
+#| message: false
+
+# Create a new variable to group data by half-year (first or second half)
+hate_crimes_filtered <- analysis_data %>%
+  filter(year(OCCURRENCE_DATE) >= 2018 & year(OCCURRENCE_DATE) <= 2023) %>%
+  mutate(
+    OCCURRENCE_YEAR = year(OCCURRENCE_DATE),
+    OCCURRENCE_HALF = ifelse(month(OCCURRENCE_DATE) <= 6, "1st Half", "2nd Half"),
+    OCCURRENCE_PERIOD = paste(OCCURRENCE_YEAR, OCCURRENCE_HALF)
+  )
+
+# Reshape the data to long format for easier plotting
+hate_crimes_bias_long <- hate_crimes_filtered %>%
+  pivot_longer(cols = c(RACE_BIAS, RELIGION_BIAS, SEXUAL_ORIENTATION_BIAS),
+               names_to = "Bias_Type", 
+               values_to = "Bias_Value") %>%
+  filter(Bias_Value != "None")  # Remove rows with no bias
+
+# Summarize the number of hate crimes by bias type and half-year period
+hate_crimes_bias_summary <- hate_crimes_bias_long %>%
+  group_by(OCCURRENCE_PERIOD, Bias_Type) %>%
+  summarise(Crime_Count = n())
+
+# Create a bar plot with half-year periods on the x-axis and bias represented by different colors
+ggplot(hate_crimes_bias_summary, aes(x = OCCURRENCE_PERIOD, y = Crime_Count, fill = Bias_Type)) +
+  geom_bar(stat = "identity", position = "stack") +  # Stack bars by bias type
+  labs(title = "Count of Hate Crimes by Bias Type (Half-Year Intervals)",
+       x = "Half-Year Period",
+       y = "Number of Hate Crimes",
+       fill = "Bias Type") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Racial Bias Breakdown by Neighborhood
+
+As previously mentioned in @tbl-3, the Yonge-Bay Corridor records the highest number of hate crimes overall. In this section, the analysis delves deeper into the racial biases driving these crimes. Table @tbl-4 provides a detailed breakdown revealing that hate crimes specifically targeting Black individuals are most prevalent in the Yonge-Bay Corridor, Moss Park and York University Heights. This neighborhood not only has the highest overall incidence of hate crimes but also stands out as the primary location for racially motivated offenses against Black individuals. These findings emphasize the significance of addressing racial bias in areas with concentrated hate crime activity, particularly in the Yonge-Bay Corridor. Furthermore, @tbl-4 and @tbl-3 provides insights for black individuals to choose their neighborhood to live in. 
+
+```{r}
+#| label: tbl-4
+#| tbl-cap: Number of Hate Crimes Targeting Black Individuals by Neighborhood
+#| echo: false
+#| warning: false
+#| message: false
+
+# Filter data for race bias and Black race target, and count occurrences by neighborhood
+race_bias_black_assaults <- analysis_data %>%
+  filter(RACE_BIAS == "black") %>%   # Assuming the race bias for Black individuals is labeled as "Black"
+  group_by(NEIGHBOURHOOD_158) %>%
+  summarise(Crime_Count = n()) %>%
+  arrange(desc(Crime_Count))
+
+# Show only the first 10 rows of the table
+kable(head(race_bias_black_assaults, 10))
+
+```
+
+The bar chart in @fig-3 illustrates the distribution of hate crimes motivated by racial bias from 2018 to 2023. The data clearly shows that hate crimes targeting Black individuals make up the majority of incidents across all years with a particularly sharp increase in 2020, which remains high in the subsequent years. Although hate crimes against other racial groups—such as White, South Asian and Indigenous individuals—are present they constitute a much smaller portion of the total. The chart highlights the consistent and disproportionate targeting of Black individuals especially during the observed rise in hate crimes starting in 2020.
+
+
+```{r}
+#| label: fig-3
+#| fig-cap: Hate Crimes by Racial Bias Over Time 
+#| echo: false
+#| warning: false
+#| message: false
+
+# Filter out unwanted categories like "none" and "other race not mentioned"
+race_bias_data_filtered <- analysis_data %>%
+  filter(!is.na(RACE_BIAS) & RACE_BIAS != "none" & RACE_BIAS != "other race not mentioned" & RACE_BIAS != "south asian"
+         & RACE_BIAS != "white, east/southeast asian") %>%
+  group_by(OCCURRENCE_YEAR, RACE_BIAS) %>%
+  summarise(Crime_Count = n()) %>%
+  ungroup()
+
+# Create the bar plot without the unwanted categories
+ggplot(race_bias_data_filtered, aes(x = OCCURRENCE_YEAR, y = Crime_Count, fill = RACE_BIAS)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Hate Crimes by Racial Bias Over Time",
+       x = "Year",
+       y = "Number of Hate Crimes",
+       fill = "Racial Bias") +
+  theme_minimal(base_size = 8) 
+```
 
 # Discussion {#sec-discussion}
 
