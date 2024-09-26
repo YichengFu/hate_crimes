@@ -43,8 +43,8 @@ The data section will introduced the detail of the data set used in this researc
 ## Measurement and packages 
 The Data set used in the analysis is gathered from Open Data Toronto through the Open Data Toronto [@opendatatoronto] and used the statistical software R [@citeR] for importing data, data cleaning and testing data. The data source "Crime Data" is collected from Toronto Police starting from 2018 to the end of 2023. It includes both temporal and spatial attributes. Other packages were used for analyzing the data such as ggplot [@ggplot2], knitr[@knitr], tidyverse [@tidyverse], lubridate [@lubridate], tinytex[@tinytex], dplyr [@dplyr]. 
 
-Data contains around 1400 observations and contains the occurrence date and specific time where the incident happened and the date reported to the police. The reason for the hate crime is categorized as race bias, religion bias and sexual orientation bias etc. The motive for 
-committing a crime, the illegal activity and the neighborhood where the crime occurred are documented by the police throughout the years. Furthermore, the type of location  such as park, apartment and school are documented to form the detailed data set and is named "Hate Crime".
+Data contains around 1400 observations and contains the occurrence date and specific time where the incident happened and the date reported to the police. The reason for committing hate crime is categorized as race bias, religion bias and sexual orientation bias etc. The motive for 
+committing a crime the illegal activity and the neighborhood where the crime occurred are documented by the police throughout the years. Furthermore, the type of location such as park, apartment and school are documented to form the detailed data set and is named "Hate Crime".
 
 ## Data cleaning
 
@@ -122,6 +122,39 @@ neighborhood_filtered <- analysis_data %>%
 # Display the table using kable.
 kable(neighborhood_filtered)
 ```
+
+## Examine the Number of Hate Crimes Across Time. 
+
+The time series graph regarding number of hate crimes is shown @fig-1. While the data reveals short-term variability with notable spikes and drops over several months the overall trend suggests an upward trend in hate crime incidents from 2018 to 2023. Specifically, there are sharp increases in hate crime counts around late 2020 and mid-2022 followed by periods of relative decline. This phenomenom of huge spikes could be due to world-wise disease COVID-19 but further justification is needed. Despite these fluctuations the general pattern indicates that hate crimes have become more frequent in recent years.
+
+The x-axis is divided into three-month intervals to avoid the overcrowding of data points and overlapping labels ensuring that the time progression remains readable. The consistent increase in hate crimes despite periodic dips highlights the need for a deeper exploration of factors that may have contributed to this rise.
+
+
+```{r}
+#| label: fig-1
+#| fig-cap: Time Series Plot for Hate Crimes Count
+#| echo: false
+#| warning: false
+#| message: false
+hate_crimes_data <- analysis_data %>%
+  mutate(OCCURRENCE_YEAR = format(as.Date(OCCURRENCE_DATE), "%Y"),
+         OCCURRENCE_MONTH = format(as.Date(OCCURRENCE_DATE), "%m"))
+# Summarize the number of hate crimes by year and month
+hate_crimes_by_month <- hate_crimes_data %>%
+  group_by(OCCURRENCE_YEAR, OCCURRENCE_MONTH) %>%
+  summarise(Crime_Count = n()) %>%
+  ungroup()
+# Create a line plot of hate crimes by year and month, with breaks every 3 months
+ggplot(hate_crimes_by_month, aes(x = as.Date(paste(OCCURRENCE_YEAR, OCCURRENCE_MONTH, "01", sep = "-")), y = Crime_Count)) +
+  geom_line(color = "blue", size = 1.2) +
+  labs(title = "Hate Crimes Over Time (Every 3 Months Breakdown)",
+       x = "Date",
+       y = "Number of Hate Crimes") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "3 months") +  # Breaks every 3 months
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate the labels for better readability
+```
+
 
 # Discussion {#sec-discussion}
 
