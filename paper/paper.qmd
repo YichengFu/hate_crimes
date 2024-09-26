@@ -53,20 +53,23 @@ After observing the data, some observations were dropped due to missing values i
 ## Observation
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-1
+#| fig-cap: Sample data visualization of what the data looks like containing the variable of intersts.
 #| echo: false
 #| warning: false
 #| message: false
 
-# Group by NEIGHBOURHOOD_158 and count the number of hate crimes for each neighborhood
-neighborhood_crime_count <- analysis_data %>%
-  group_by(NEIGHBOURHOOD_158) %>%
-  summarise(Crime_Count = n()) %>%
-  arrange(desc(Crime_Count))
+# Select the variables: Occurrence Date, Bias Types, Neighborhood, Offense, and Arrest
+selected_variables <- analysis_data %>%
+  select(OCCURRENCE_DATE, RACE_BIAS, RELIGION_BIAS, SEXUAL_ORIENTATION_BIAS, 
+         NEIGHBOURHOOD_158, PRIMARY_OFFENCE, ARREST_MADE)
 
-# Display the resulting table
-print(neighborhood_crime_count)
+# Display a sample of 10 rows from the selected variables
+sample_data <- selected_variables %>%
+  sample_n(10)
+
+# Show the table in a nice format using kable
+kable(sample_data, caption = "Sample of Cleaned Data with Selected Variables", align = "c")
 ```
 
 
@@ -75,17 +78,6 @@ print(neighborhood_crime_count)
 
 Our results are summarized in @tbl-modelresults.
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
 
 ```{r}
 #| echo: false
@@ -94,13 +86,25 @@ first_model <-
 #| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
 #| warning: false
 
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
+```
+
+A sample observation is shown in @fig-planes. This table indicates neighborhoods in Toronto with more than 20 Hate Crimes from 2018 to 2023. The number of 20 hate crimes is manually selected by the author after inspecting the data to avoid cluster of data. Only the significant neighbourhoods are selected to include in this table to give a brief observation of the hate crime case numbers in different area in Toronto. 
+```{r}
+#| label: fig-2
+#| fig-cap: Neighborhoods with more than 20 Hate Crimes from 2018 to 2023
+#| echo: false
+#| warning: false
+#| message: false
+
+# Filter for neighborhoods with more than 20 hate crimes
+neighborhood_filtered <- analysis_data %>%
+  group_by(NEIGHBOURHOOD_158) %>%
+  summarise(Crime_Count = n()) %>%
+  filter(Crime_Count > 20) %>%
+  arrange(desc(Crime_Count))
+
+# Display the table using kable.
+kable(neighborhood_filtered)
 ```
 
 # Discussion {#sec-discussion}

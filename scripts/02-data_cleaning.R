@@ -9,13 +9,11 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(dplyr)
+library(lubridate) # for date handling
 
 #### Clean data ####
 raw_data <- read_csv("data/raw_data/raw_data.csv")
-
-# Load the necessary packages
-library(dplyr)
-library(lubridate) # for date handling
 
 # Load data set
 hate_crimes_data <- read.csv("data/raw_data/raw_data.csv")
@@ -27,17 +25,13 @@ str(hate_crimes_data)
 hate_crimes_cleaned <- hate_crimes_data %>% distinct()
 
 # 2. Handle missing values
-# You can either remove rows with missing values or impute them
 # Removing rows with missing values
 hate_crimes_cleaned <- hate_crimes_cleaned %>% drop_na()
 
-# Impute missing values if appropriate 
+# 3Impute missing values if appropriate 
 hate_crimes_cleaned$RACE_BIAS[is.na(hate_crimes_cleaned$RACE_BIAS)] <- "None"
 hate_crimes_cleaned$RELIGION_BIAS[is.na(hate_crimes_cleaned$RELIGION_BIAS)] <- "None"
 hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS[is.na(hate_crimes_cleaned$SEXUAL_ORIENTATION_BIAS)] <- "None"
-
-# 3. Convert dates to proper date format
-hate_crimes_cleaned$OCCURRENCE_DATE <- as.Date(hate_crimes_cleaned$OCCURRENCE_DATE, format="%Y-%m-%d")
 
 # 4. Ensure consistent formatting (e.g., converting bias columns to lowercase or factor variables)
 hate_crimes_cleaned$RACE_BIAS <- tolower(hate_crimes_cleaned$RACE_BIAS)
@@ -57,3 +51,5 @@ head(hate_crimes_cleaned)
 
 #### Save data ####
 write_csv(hate_crimes_cleaned, "data/analysis_data/analysis_data.csv")
+
+
