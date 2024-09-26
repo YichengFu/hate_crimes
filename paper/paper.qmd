@@ -48,50 +48,66 @@ committing a crime, the illegal activity and the neighborhood where the crime oc
 
 ## Data cleaning
 
-After observing the data, some observations were dropped due to missing values in location type meaning the recorder had a hard time describing the location characteristics. Therefore, these observations were dropped out of the cleaned data set and will not be included in further data analysis. Date is critical in our data investigation, observations where the reported time is before occurrence time is dropped to assure data validity. Since the data set is from Open Data Toronto the quality of the data is decent. Further cleaning process is unnecessary due to origin high quality of data set . 
+After observing the data, some observations were dropped due to missing values in location type meaning the recorder had a hard time describing the location characteristics. Therefore, these observations were dropped out of the cleaned data set and will not be included in further data analysis. Date is critical in our data investigation, observations where the reported time is before occurrence time is dropped to assure data validity. Since the data set is from Open Data Toronto the quality of the data is decent. Further cleaning process is unnecessary due to origin high quality of data set. 
 
-## Observation
+## Observation of cleaned data
+A sample of observation of cleaned data is displayed in @tbl-1. This table includes key variables of interest that will be used for further analysis. Specifically, it contains the bias type, which indicates whether the crime was motivated by factors such as race, religion, or sexual orientation. The date of the incident is provided, allowing for temporal analysis of hate crime trends over time. Additionally, the neighborhood where each crime occurred is included, which is crucial for understanding geographic characteristics and identifying potential hotspots for hate crimes within Toronto. The offense type records the legal classification of the crime, such as assault or mischief providing insight into the nature of the incidents. Lastly, the arrest status variable indicates whether law enforcement made an arrest in response to the reported crime, which is an important indicator of justice system responses to hate crimes.
 
 ```{r}
-#| label: fig-1
-#| fig-cap: Sample data visualization of what the data looks like containing the variable of intersts.
+#| label: tbl-1
+#| fig-cap: Sample data visualization of what the data looks like containing the variable of intersts. Note the column sex. stands for sexual orientation. RLGbias stands for religion bias.
 #| echo: false
 #| warning: false
 #| message: false
 
-# Select the variables: Occurrence Date, Bias Types, Neighborhood, Offense, and Arrest
+# Rename columns for a shorter format
 selected_variables <- analysis_data %>%
-  select(OCCURRENCE_DATE, RACE_BIAS, RELIGION_BIAS, SEXUAL_ORIENTATION_BIAS, 
-         NEIGHBOURHOOD_158, PRIMARY_OFFENCE, ARREST_MADE)
+  select(OCCURRENCE_YEAR, RACE_BIAS,  SEXUAL_ORIENTATION_BIAS, RELIGION_BIAS,
+         NEIGHBOURHOOD_158, PRIMARY_OFFENCE, ARREST_MADE) %>%
+  rename(
+    Year = OCCURRENCE_YEAR,
+    RaceBias = RACE_BIAS,
+    Sex. = SEXUAL_ORIENTATION_BIAS,
+    RLGBias = RELIGION_BIAS,
+    Location = NEIGHBOURHOOD_158,
+    Offense = PRIMARY_OFFENCE,
+    Arrest = ARREST_MADE
+  )
 
-# Display a sample of 10 rows from the selected variables
+# Display a sample of 8 rows from the renamed variables
 sample_data <- selected_variables %>%
-  sample_n(10)
+  sample_n(8)
 
-# Show the table in a nice format using kable
+# Show the table using kable
 kable(sample_data, caption = "Sample of Cleaned Data with Selected Variables", align = "c")
 ```
+## Basic Summary Statistics of the Data
+
+A general summary statistic is shown @tbl-2. Since hate crimes are relatively rare events, the data may show an uneven distribution across different years and neighborhoods. Some years may exhibit higher counts due to specific incidents or socio-political factors that led to spikes in reporting, while other years may show fewer cases, resulting in an unbalanced distribution. Due to the categorical nature of many key variables, such as bias types (race, religion, sexual orientation), and the relatively small number of observations per category, more advanced summary statistics (e.g., mean, standard deviation) are not as meaningful in this context. Instead, the focus is on counting occurrences and understanding the distribution of incidents across time and location. Therefore, we limit the analysis to counts and proportions rather than providing more traditional numeric summary statistics. Further analysis of location and its relationship to number of hate crimes will be shown in @sec-results.
 
 
+```{r}
+#| label: tbl-2
+#| echo: false
+#| warning: false
+#| message: false
+# Count the number of observations (hate crimes) by year
+observations_by_year <- analysis_data %>%
+  group_by(OCCURRENCE_YEAR) %>%
+  summarise(Observation_Count = n()) %>%
+  arrange(OCCURRENCE_YEAR)
+
+# Display the table with kable
+kable(observations_by_year, caption = "Number of Observations by Year", align = "c")
+
+```
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults.
-
-
+A sample observation is shown in @tbl-3. This table indicates neighborhoods in Toronto with more than 20 Hate Crimes from 2018 to 2023. The number of 20 hate crimes is manually selected by the author after inspecting the data to avoid overlapping of the visualization of the table or cluster of data. Only the significant neighbourhoods are selected to include in this table to give a brief observation of the number of crime case numbers in different area in Toronto. 
 ```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-```
-
-A sample observation is shown in @fig-planes. This table indicates neighborhoods in Toronto with more than 20 Hate Crimes from 2018 to 2023. The number of 20 hate crimes is manually selected by the author after inspecting the data to avoid cluster of data. Only the significant neighbourhoods are selected to include in this table to give a brief observation of the hate crime case numbers in different area in Toronto. 
-```{r}
-#| label: fig-2
-#| fig-cap: Neighborhoods with more than 20 Hate Crimes from 2018 to 2023
+#| label: tbl-3
+#| tbl-cap: Neighborhoods with more than 20 Hate Crimes from 2018 to 2023
 #| echo: false
 #| warning: false
 #| message: false
