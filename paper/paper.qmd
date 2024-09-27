@@ -32,7 +32,7 @@ analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 # Introduction
 
-Hate crimes are a significant incident reflecting deep-rooted prejudice and discrimination within communities. Hate-crime victimization against racially visible people is of growing concern (Chongatera 2013). These crimes not only impact individuals but also harm the society often leaving individuals feeling unsafe. Social violence omit both the daily violence suffered by certain social categories and its many impacts on the victims (Dalphond 2021). In Toronto, understanding the patterns and dynamics of hate crimes is crucial for addressing their causes and mitigating their effects. While racial and cultural diversity initiatives are central in hate crime policy, combating racially motivated hate crime is often obscured by matters considered more significant by police (Bryan 2019). This paper aims to fill that gap by providing an in-depth analysis of hate crimes in Toronto over time and across different neighborhoods.
+Hate crimes are a significant incident reflecting deep-rooted prejudice and discrimination within communities. Hate-crime victimization against racially visible people is of growing concern [@Chongatera2013]. These crimes not only impact individuals but also harm the society often leaving individuals feeling unsafe. Social violence omit both the daily violence suffered by certain social categories and its many impacts on the victims [@Mercier-Dalphond2021]. In Toronto, understanding the patterns and dynamics of hate crimes is crucial for addressing their causes and mitigating their effects. While racial and cultural diversity initiatives are central in hate crime policy, combating racially motivated hate crime is often obscured by matters considered more significant by police [@bryan2019race]. This paper aims to fill that gap by providing an in-depth analysis of hate crimes in Toronto over time and across different neighborhoods.
 
 This study focuses exploring two primary questions: how hate crimes in Toronto have evolved over time and whether certain neighborhoods experience a disproportionate concentration of bias-motivated incidents. Using Toronto open Data hate crime from 2018 to 2023 I analyzes temporal trends to identify peaks and patterns in the frequency of reported incidents. Additionally, the research examines whether specific biases (such as race, religion, or sexual orientation) are more prevalent in particular areas contributing to an understanding of neighborhood-level disparities. The results provide insight into both the temporal and spatial aspects of hate crimes, shedding light on how bias manifests in different contexts within the city.
 
@@ -157,7 +157,7 @@ ggplot(hate_crimes_by_month, aes(x = as.Date(paste(OCCURRENCE_YEAR, OCCURRENCE_M
 
 ## Analysis of Hate Crimes by Bias Type   
 
-According to @fig2, it illustrates the count of hate crimes by bias type from 2018 to 2023 broken down into half-year intervals. Hate crimes involving race bias (in red) consistently form the largest proportion of incidents across all half-year periods with a marked increase especially in the later periods (2022 and 2023). Religion bias (in green) remains a significant contributor to hate crimes, steadily increasing over time, particularly during 2022 and 2023. Sexual orientation bias (in blue) while present constitutes a smaller proportion of the total hate crimes though it shows a noticeable rise in recent years.
+According to @fig-2, it illustrates the count of hate crimes by bias type from 2018 to 2023 broken down into half-year intervals. Hate crimes involving race bias (in red) consistently form the largest proportion of incidents across all half-year periods with a marked increase especially in the later periods (2022 and 2023). Religion bias (in green) remains a significant contributor to hate crimes, steadily increasing over time, particularly during 2022 and 2023. Sexual orientation bias (in blue) while present constitutes a smaller proportion of the total hate crimes though it shows a noticeable rise in recent years.
 
 The general trend indicates an upward trajectory in the total number of hate crimes across all bias types with a sharp increase in the later half-year periods of 2022 and 2023. This suggests that hate crimes have become more frequent and more diverse in bias type over time highlighting the need for continued focus on these issues.
 ```{r}
@@ -250,14 +250,20 @@ ggplot(race_bias_data_filtered, aes(x = OCCURRENCE_YEAR, y = Crime_Count, fill =
   theme_minimal(base_size = 8) 
 ```
 
+\newpage
 # Discussion {#sec-discussion}
 
-## First discussion point {#sec-first-point}
+## Rising Trend of Hate Crimes
 
+The time-series analysis reveals a steady increase in hate crimes in Toronto from 2018 to 2023, with notable spikes in 2020 and 2022. This trend indicates that hate crimes, particularly those motivated by racial bias, have been on the rise in recent years. The sharp increase during the COVID-19 pandemic suggests a possible correlation between social stressors and an escalation in hate crimes. This increase highlights a pressing need for community awareness programs and stronger preventive measures to curb the growing number of incidents. The upward trajectory also suggests that existing policies and interventions may need to be revisited or bolstered to better protect vulnerable communities.
 
-## Second discussion point
+## Disproportionate Racial Bias
 
-## Third discussion point
+The data consistently show that hate crimes motivated by racial bias, particularly those targeting Black individuals, form the largest portion of the incidents across all years. This finding aligns with global concerns over racial discrimination and reinforces the idea that racial bias remains a significant driver of hate crimes in Toronto. Specific neighborhoods, such as Yonge-Bay Corridor and York University Heights, show a high concentration of such incidents, emphasizing the need for localized responses. These neighborhoods may require targeted community outreach and police presence to address racial tensions and foster exclusivity. The prominence of racial bias in hate crimes suggests that efforts to combat racism must remain a central focus of anti-hate crime policies.
+
+## Spatial Variances and Neighborhood Hotspots
+
+The spatial analysis underscores that hate crimes are not evenly distributed across Toronto, with certain neighborhoods experiencing disproportionately higher rates of incidents. For instance, the Yonge-Bay Corridor and Church-Wellesley neighborhoods consistently rank among the highest in hate crime occurrences. This geographic concentration suggests that specific socio-demographic factors or local tensions may contribute to the higher rates of hate crimes in these areas. Understanding the root causes of these disparities—whether they stem from economic inequality, social marginalization, or historical prejudices—can guide more effective policy interventions. Targeted strategies that address the unique conditions of these neighborhoods are crucial in reducing the incidence of hate crimes and fostering safer, more inclusive communities.
 
 ## Weaknesses and next steps
 
